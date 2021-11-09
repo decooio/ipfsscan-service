@@ -1,2 +1,1 @@
-# ipfsscan-service
-Backend service of IPFSScan
+# ipfs-scan-backend
