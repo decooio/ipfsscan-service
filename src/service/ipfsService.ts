@@ -27,7 +27,9 @@ export async function findprovs(
         return i !== '' && JSON.parse(i).Type === 4;
       })
       .map((i: string) => {
-        return JSON.parse(i);
+        return {
+          id: JSON.parse(i).Responses[0].ID
+        };
       })
       .value();
     cache.set(cacheKey, result, configs.ipfs.CACHE_TTL);
