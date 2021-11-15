@@ -7,6 +7,7 @@ const commonDao = {
   queryForArray: queryForArray,
   queryForObj: queryForObj,
   queryForUpdate: queryForUpdate,
+  queryForInsert: queryForInsert,
 };
 
 function queryForCount(sql: string, replace: any[]): Promise<number> {
@@ -59,7 +60,17 @@ function queryForUpdate(sql: string, replace: any[]): Promise<number> {
       type: sequelize.QueryTypes.UPDATE,
     })
     .then((r: any) => {
-      logger.info(r);
+      return 0;
+    });
+}
+
+function queryForInsert(sql: string, replace: any[]): Promise<number> {
+  return sequelize
+    .query(sql, {
+      replacements: replace,
+      type: sequelize.QueryTypes.INSERT,
+    })
+    .then((r: any) => {
       return 0;
     });
 }
