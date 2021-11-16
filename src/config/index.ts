@@ -15,9 +15,9 @@ export const configs = {
   },
   ipfs: {
     delegates: [] as string[],
-    NUM_PROVIDERS: _.parseInt(getEnv('NUM_PROVIDERS', 100)),
-    IPFS_AUTH_USERNAME: getEnv('IPFS_AUTH_USERNAME', 'crust'),
-    IPFS_AUTH_PASSWORD: getEnv('IPFS_AUTH_PASSWORD', 'crust@!V587'),
+    NUM_PROVIDERS: _.parseInt(getEnv('NUM_PROVIDERS', 200)),
+    IPFS_AUTH_USERNAME: getEnv('IPFS_AUTH_USERNAME', 'ghost'),
+    IPFS_AUTH_PASSWORD: getEnv('IPFS_AUTH_PASSWORD', 'ghost'),
     IPFS_HTTP_TIMEOUT: _.parseInt(getEnv('IPFS_HTTP_TIMEOUT', 180000)),
     CACHE_TTL: _.parseInt(getEnv('CACHE_TTL', 60 * 60 * 24)),
   },
