@@ -167,11 +167,12 @@ async function indexCrustFiles() {
     const last = _.last(cids);
     // filter file not exist
     if (!_.isEmpty(existFiles)) {
+      logger.info(`contains exist files ${_.size(existFiles)}`)
       const group = _.groupBy(existFiles, (e: any) => {
-        return e.cid;
+        return e.cid.toUpperCase();
       });
       cids = _.filter(cids, (c: any) => {
-        return _.isEmpty(group[c.cid]);
+        return _.isEmpty(group[c.cid.toUpperCase()]);
       });
       if (_.isEmpty(cids)) {
         logger.info('all cids are duplicate');
