@@ -1,17 +1,22 @@
-import {logger} from '../logger';
 import {cache} from '../common/commonUtils';
 const axios = require('axios');
 const _ = require('lodash');
 import {configs} from '../config';
+import {findPeersByCidAndGatewayId} from '../dao/peersInfoDao';
 
 export async function findprovs(
   cid: string,
   baseUrl: string,
-  gatewayId: number
+  gatewayId: number,
+  fromDb = true
 ): Promise<any> {
   const cacheKey = `PROVS_${gatewayId}_${cid}`;
   const cacheResult = cache.get(cacheKey);
   if (cacheResult === undefined) {
+    const dbResult = await findPeersByCidAndGatewayId(cid, gatewayId);
+    if (fromDb && !_.isEmpty(dbResult) && !_.isEmpty(dbResult.peers_info)) {
+      return dbResult.peers_info;
+    }
     const url = `${baseUrl}/api/v0/dht/findprovs?arg=${cid}&verbose=true&num-providers=${configs.ipfs.NUM_PROVIDERS}`;
     const config = {
       auth: {
@@ -28,7 +33,7 @@ export async function findprovs(
       })
       .map((i: string) => {
         return {
-          id: JSON.parse(i).Responses[0].ID
+          id: JSON.parse(i).Responses[0].ID,
         };
       })
       .value();

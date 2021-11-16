@@ -5,6 +5,8 @@ import {queryAll, queryById} from '../dao/gatewayDao';
 import {Failure, FailureError} from '../models/Failure';
 import {findprovs} from '../service/ipfsService';
 import {logger} from '../logger';
+import {upsertFileAccessTime} from '../dao/fileInfoDao';
+import {FileSource} from '../models/FileInfo';
 const _ = require('lodash');
 const validate = require('../handlers/validationHandler');
 export const router = express.Router();
@@ -44,6 +46,7 @@ router.post(
       }),
   ]),
   async (req, res) => {
+    await upsertFileAccessTime(req.body.cid, FileSource.unknown);
     findprovs(req.body.cid, req.body.gateway.baseUrl, req.body.gateway.id)
       .then(r => {
         res.json(r);

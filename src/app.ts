@@ -6,6 +6,13 @@ const path = require('path');
 const Postgrator = require('postgrator');
 const app = express();
 import {router} from './routes/index';
+import {
+  fixUnknownSourceFiles,
+  indexCrustFileInDb,
+  indexFilePeersInDb,
+  markAndFixFileInfos,
+} from './service/indexService';
+import {logger} from './logger';
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -23,4 +30,24 @@ const postgrator = new Postgrator({
 
 postgrator.migrate('max').then((migrations: any) => {
   app.listen(configs.server.port);
+  indexCrustFileInDb()
+    .then(() => {})
+    .catch(e => {
+      logger.error(e.stack);
+    });
+  indexFilePeersInDb()
+    .then(() => {})
+    .catch(e => {
+      logger.error(e.stack);
+    });
+  markAndFixFileInfos()
+    .then(() => {})
+    .catch(e => {
+      logger.error(e.stack);
+    });
+  fixUnknownSourceFiles()
+    .then(() => {})
+    .catch(e => {
+      logger.error(e.stack);
+    });
 });
