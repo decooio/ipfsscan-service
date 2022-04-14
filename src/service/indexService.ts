@@ -29,6 +29,8 @@ const indexFileBatchSize = 5;
 const MarketFilesKey =
   '0x5ebf094108ead4fefa73f7a3b13cb4a7b3b78f30e9b952d60249b22fcdaaa76d';
 const KeyLastIndexedKey = 'db-indexer:LastIndexedKey';
+import { isFunction } from '@polkadot/util';
+
 let api: any;
 
 export async function indexCrustFileInDb() {
@@ -251,7 +253,7 @@ async function queryCrustFile(
 ): Promise<CrustFileInfo | null> {
   await api.isReady;
   // query from chain
-  const res = await api.query.market.files(cid);
+  const res = isFunction(api.query.market.filesV2) ? await api.query.market.filesV2(cid) : await api.query.market.files(cid);
   const file = res ? JSON.parse(JSON.stringify(res)) : null;
   if (_.isEmpty(file)) {
     logger.warn(`file ${cid} not exist on chain`);
